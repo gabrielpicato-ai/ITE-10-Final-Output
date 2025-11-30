@@ -1,0 +1,11 @@
+﻿    Household ID,  Household Number,             Sitio,   Owner Status, Interviewed By, Reviewed By ,Date of Visit,            Water Source,                          Toilet Type,   Home Link,First Name, Last Name, Relationship
+ H001,HM-2025-001,Maligaya,Owned,Maria Santos,Juan Dela Cruz,"june 8,2025", Level 3- Individual Household,A- Individual/ Pour-flush w/ septic tank,Google Link,Roberto,Gonzales,Head
+H002,HM-2025-002,Bagong Bukal,Owned,Maria Santos,Juan Dela Cruz,"june 9,2025", Level 2- Communal Faucet,A- Individual/ Pour-flush w/ septic tank,Google Link,Maria ,Santos,Wife
+H003,HM-2025-003,Makahiya, Rented,Maria Santos,Juan Dela Cruz,"june 7,2025",Level 1- Point Source,B- Shared/ Simple toilet,Google Link,Juan,Dela Cruz,Husband
+H004,HM-2025-004,Talipapa,Owned,Maria Santos,Juan Dela Cruz,"june 10,2025",Level 3- Individual Household,A- Individual/ Pour-flush w/ septic tank,Google Link,Ana,Villanueva,Head
+H005,HM-2025-005,San Roque Hieghts,Informal Settler,Maria Santos,Juan Dela Cruz,"june 10,2025", Level 2- Communal Faucet,A- Individual/ Pour-flush w/ septic tank,Google Link,Jose,Ramirez Jr.,Son
+H006,HM-2025-006,Kawayanon,Leased,Maria Santos,Juan Dela Cruz,"june 9,2025", Level 3- Individual Household,A- Individual/ Pour-flush w/ septic tank,Google Link,Micah,Fernandez,Daughter
+H007,HM-2025-007,Tinikaran,Owned,Maria Santos,Juan Dela Cruz,"june 5,2025",Level 1- Point Source,B- Shared/ Simple toilet,Google Link,Crisanto,Lopez,Head
+H008,HM-2025-008,Ilang-ilang,Owned,Maria Santos,Juan Dela Cruz,"june 6,2025", Level 3- Individual Household,A- Individual/ Pour-flush w/ septic tank,Google Link,Jenny,Loucor,Head
+H009,HM-2025-009,Sto.Niño,Rented,Maria Santos,Juan Dela Cruz,"june 11,2025", Level 2- Communal Faucet,B- Shared/ Simple toilet,Google Link,Bobby,Aguilar,Head
+H010,HM-2025-010,Pag-asa Creek,Owned,Maria Santos,Juan Dela Cruz,"june 12,2025",Level 3- Individual Household,A- Individual/ Pour-flush w/ septic tank,Google Link,Lucy,Mendoza,Wife
