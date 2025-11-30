@@ -414,6 +414,30 @@ node_modules/
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+# Operating System files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Editor directories (VS Code, Jetbrains, etc.)
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Dependency directories (If you ever add Node.js later)
+node_modules/
+package-lock.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Private Data / Raw Files
+# (Good practice to ignore raw Excel files containing real names)
+*.xlsx
+*.xls
+raw_data/
+
 # Local History for Visual Studio Code
 .history/
 
