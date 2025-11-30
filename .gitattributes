@@ -1,2 +1,45 @@
-# Auto detect text files and perform LF normalization
+# ----------------------------------------------------------------------
+# AUTO-DETECT
+# ----------------------------------------------------------------------
+# Set the default behavior, in case people don't have core.autocrlf set.
 * text=auto
+
+# ----------------------------------------------------------------------
+# TEXT FILES
+# ----------------------------------------------------------------------
+# Force these files to be text and use consistent line endings
+*.html text
+*.css text
+*.js text
+*.json text
+*.md text
+*.txt text
+*.csv text
+.gitignore text
+.gitattributes text
+
+# ----------------------------------------------------------------------
+# IMAGES & BINARIES
+# ----------------------------------------------------------------------
+# Treat these as binary so Git doesn't try to modify line endings
+# (Modifying binaries corrupts them)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# ----------------------------------------------------------------------
+# VECTORS & FONTS
+# ----------------------------------------------------------------------
+# SVGs are technically XML (text), but often treated as images. 
+# We keep them as text so you can see code diffs if needed.
+*.svg text
+
+# Fonts should always be binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
