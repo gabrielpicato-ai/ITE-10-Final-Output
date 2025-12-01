@@ -34,55 +34,43 @@ document.addEventListener('DOMContentLoaded', function() {
   const prevMonthBtn = document.getElementById('prev-month');
   const nextMonthBtn = document.getElementById('next-month');
   const todayBtn = document.getElementById('today-btn');
-  const eventPanel = document.getElementById('event-panel');
   const eventDateEl = document.getElementById('event-date');
   const eventListEl = document.getElementById('event-list');
   
+  const addEventBtn = document.getElementById('add-event-btn');
+  const eventModal = document.getElementById('event-modal-overlay');
+  const closeEventX = document.getElementById('close-event-modal');
+  const cancelEventBtn = document.getElementById('cancel-event-btn');
+  const saveEventBtn = document.getElementById('save-event-btn');
+  
+  const dateInput = document.getElementById('new-event-date');
+  const timeInput = document.getElementById('new-event-time');
+  const descInput = document.getElementById('new-event-desc');
+
   let currentDate = new Date();
   let selectedDate = null;
   
-  const events = {
-    '2025-12-6': [
-      { time: '7:00 AM', text: 'Holiday Clean-Up Drive' },
-      { time: '10:30 M', text: 'Barangay Meeting' }
-    ],
-    '2025-9-20': [
-      { time: '11:00 AM', text: 'Doctor appointment' }
-    ],
-    '2025-9-25': [
-      { time: '07:00 PM', text: 'Birthday party' },
-      { time: '09:00 PM', text: 'Dinner with friends' }
-    ],
-    '2025-10-2': [
-      { time: '03:00 PM', text: 'Conference call' }
-    ],
-    '2025-10-10': [
-      { time: 'All day', text: 'Project deadline' }
-    ],
-    '2025-10-18': [
-      { time: '12:00 PM', text: 'Lunch with client' },
-      { time: '04:00 PM', text: 'Product demo' }
-    ]
-  };
+  let events = {};
   
+  function loadEvents() {
+    const storedEvents = localStorage.getItem('barangayEvents');
+    if (storedEvents) {
+      events = JSON.parse(storedEvents);
+    } else {
+      events = {
+        '2025-12-6': [{ time: '7:00 AM', text: 'Holiday Clean-Up Drive' }],
+        '2025-9-20': [{ time: '11:00 AM', text: 'Doctor appointment' }],
+        '2025-9-25': [{ time: '07:00 PM', text: 'Birthday party' }],
+        '2025-10-10': [{ time: 'All day', text: 'Project deadline' }]
+      };
+      localStorage.setItem('barangayEvents', JSON.stringify(events));
+    }
+  }
+
   function renderCalendar() {
-    const firstDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
-    
-    const lastDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0
-    );
-    
-    const prevLastDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      0
-    );
+    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const prevLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
     
     const firstDayIndex = firstDay.getDay();
     const lastDayIndex = lastDay.getDay();
@@ -99,18 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     for (let x = firstDayIndex; x > 0; x--) {
       const prevDate = prevLastDay.getDate() - x + 1;
-      const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${prevDate}`;
-      const hasEvent = events[dateKey] !== undefined;
-      
-      days += `<div class="day other-month${hasEvent ? ' has-events' : ''}">${prevDate}</div>`;
+      const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${prevDate}`; // Note: Month is 0-indexed in key for prev month logic consistency requires care. 
+      // Simplified: Just render visuals for prev month
+      days += `<div class="day other-month">${prevDate}</div>`;
     }
     
     for (let i = 1; i <= lastDay.getDate(); i++) {
-      const date = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        i
-      );
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
       
       const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${i}`;
       const hasEvent = events[dateKey] !== undefined;
@@ -134,18 +117,13 @@ document.addEventListener('DOMContentLoaded', function() {
         dayClass += ' selected';
       }
       
-      if (hasEvent) {
-        dayClass += ' has-events';
-      }
+      if (hasEvent) dayClass += ' has-events';
       
       days += `<div class="${dayClass}" data-date="${dateKey}">${i}</div>`;
     }
     
     for (let j = 1; j <= nextDays; j++) {
-      const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth() + 2}-${j}`;
-      const hasEvent = events[dateKey] !== undefined;
-      
-      days += `<div class="day other-month${hasEvent ? ' has-events' : ''}">${j}</div>`;
+      days += `<div class="day other-month">${j}</div>`;
     }
     
     daysEl.innerHTML = days;
@@ -163,19 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function showEvents(dateStr) {
     if(!dateStr) return;
-
+    
     const [year, month, day] = dateStr.split('-').map(Number);
     const dateObj = new Date(year, month - 1, day);
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const dayName = dayNames[dateObj.getDay()];
     
-    eventDateEl.textContent = `${dayName}, ${months[dateObj.getMonth()]} ${day}, ${year}`;
-    
+    eventDateEl.textContent = `${dayNames[dateObj.getDay()]}, ${months[month-1]} ${day}, ${year}`;
     eventListEl.innerHTML = '';
     
     if (events[dateStr] && events[dateStr].length > 0) {
@@ -183,29 +155,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const eventItem = document.createElement('div');
         eventItem.className = 'event-item';
         
-        const contentWrapper = document.createElement('div');
-        contentWrapper.style.display = 'flex';
-        contentWrapper.style.alignItems = 'center';
-        contentWrapper.style.gap = '12px';
-        contentWrapper.style.flex = '1'; // Takes up remaining space
-        
-        contentWrapper.innerHTML = `
+        eventItem.innerHTML = `
           <div class="event-color"></div>
           <div class="event-time">${event.time}</div>
           <div class="event-text">${event.text}</div>
+          <button class="delete-event-btn" onclick="deleteEvent('${dateStr}', ${index})">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+          </button>
         `;
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-event-btn';
-        deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>`;
-        
-        deleteBtn.addEventListener('click', (e) => {
-          e.stopPropagation(); 
-          deleteEvent(dateStr, index);
-        });
-
-        eventItem.appendChild(contentWrapper);
-        eventItem.appendChild(deleteBtn);
         eventListEl.appendChild(eventItem);
       });
     } else {
@@ -213,44 +170,108 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function deleteEvent(dateKey, index) {
-    if (confirm('Are you sure you want to delete this event?')) {
+  function openModal() {
+    eventModal.classList.add('active');
+
+    if(selectedDate) {
+        
+        const y = selectedDate.getFullYear();
+        const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const d = String(selectedDate.getDate()).padStart(2, '0');
+        dateInput.value = `${y}-${m}-${d}`;
+    }
+  }
+
+  function closeModal() {
+    eventModal.classList.remove('active');
+    descInput.value = '';
+    timeInput.value = '';
+  }
+
+  function saveEvent() {
+    const rawDate = dateInput.value;
+    const time = timeInput.value;
+    const desc = descInput.value;
+
+    if(!rawDate || !desc) {
+      alert("Please fill in the Date and Description");
+      return;
+    }
+
+    const [y, m, d] = rawDate.split('-').map(Number);
+    const storageKey = `${y}-${m}-${d}`;
+
+    if (!events[storageKey]) {
+      events[storageKey] = [];
+    }
+
+    let formattedTime = time;
+    if(time) {
+        const [h, min] = time.split(':');
+        const hour = parseInt(h);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const showHour = hour % 12 || 12;
+        formattedTime = `${showHour}:${min} ${ampm}`;
+    } else {
+        formattedTime = "All Day";
+    }
+
+    events[storageKey].push({
+      time: formattedTime,
+      text: desc
+    });
+
+    localStorage.setItem('barangayEvents', JSON.stringify(events));
+    
+    if (currentDate.getMonth() + 1 === m && currentDate.getFullYear() === y) {
+        renderCalendar(); 
+    }
+    
+    if(selectedDate && 
+       selectedDate.getDate() === d && 
+       selectedDate.getMonth() + 1 === m && 
+       selectedDate.getFullYear() === y) {
+        showEvents(storageKey);
+    }
+
+    closeModal();
+  }
+
+  window.deleteEvent = function(dateKey, index) {
+    if (confirm('Delete this event?')) {
       events[dateKey].splice(index, 1);
-
-      if (events[dateKey].length === 0) {
-        delete events[dateKey];
-      }
-
-      localStorage.setItem('events', JSON.stringify(events));
-
+      if (events[dateKey].length === 0) delete events[dateKey];
+      
+      localStorage.setItem('barangayEvents', JSON.stringify(events));
       renderCalendar();
       showEvents(dateKey);
     }
-  }
+  };
   
+  addEventBtn.addEventListener('click', openModal);
+  closeEventX.addEventListener('click', closeModal);
+  cancelEventBtn.addEventListener('click', closeModal);
+  saveEventBtn.addEventListener('click', saveEvent);
+
   prevMonthBtn.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
-    eventDateEl.textContent = 'Select a date';
-    eventListEl.innerHTML = '<div class="no-events">Select a date with events to view them here</div>';
   });
   
   nextMonthBtn.addEventListener('click', () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
-    eventDateEl.textContent = 'Select a date';
-    eventListEl.innerHTML = '<div class="no-events">Select a date with events to view them here</div>';
   });
   
   todayBtn.addEventListener('click', () => {
     currentDate = new Date();
     selectedDate = new Date();
     renderCalendar();
-    
     const dateStr = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
     showEvents(dateStr);
   });
-  
+
+  loadEvents();
   renderCalendar();
 });
 
@@ -448,7 +469,7 @@ const householdCSV = `Household ID,Household Number,Sitio,Owner Status,Interview
   function renderTable() {
     const tableBody = document.getElementById('citizen-table-body');
     if(!tableBody) return;
-
+    
     const displayList = [...residents].reverse(); 
 
     tableBody.innerHTML = displayList.map(r => {
