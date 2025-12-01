@@ -250,6 +250,8 @@
             </table>
           </div>
         </div> 
+
+        
       </main>
     </div>
   </div>
@@ -257,6 +259,33 @@
   <footer>
     Barangay Information System ©2025 · Created by GROUP 2 BJ1
   </footer>
+
+<div class="modal-overlay" id="event-modal-overlay">
+  <div class="modal" style="max-width: 400px;">
+    <div class="modal-header">
+      <h3>Add New Event</h3>
+      <button class="close-modal" id="close-event-modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label>Date</label>
+        <input type="date" id="new-event-date">
+      </div>
+      <div class="input-group">
+        <label>Time</label>
+        <input type="time" id="new-event-time">
+      </div>
+      <div class="input-group">
+        <label>Event Description</label>
+        <input type="text" id="new-event-desc" placeholder="e.g., Barangay Assembly">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="cancel-event-btn">Cancel</button>
+      <button class="btn-save" id="save-event-btn">Save Event</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="citizen-modal-overlay">
   <div class="modal" style="max-width: 800px; width: 95%;">
@@ -271,5 +300,7 @@
     </div>
   </div>
 </div>
+
+
 </body>
 </html>
